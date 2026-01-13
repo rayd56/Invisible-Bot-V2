@@ -1,121 +1,123 @@
-const fs = require("fs-extra");
-const { utils } = global;
+const moment = require("moment-timezone");
+
+const kylefacts = [
+    "Octopuses have three hearts: two pump blood to the gills, and one pumps it to the rest of the body.",
+    "Honey never spoils; archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old.",
+    "The world's oldest known recipe is for beer.",
+    "Bananas are berries, but strawberries are not.",
+    "Cows have best friends and can become stressed when they are separated.",
+    "The shortest war in history was between Britain and Zanzibar on August 27, 1896; Zanzibar surrendered after 38 minutes.",
+    "The average person walks the equivalent of three times around the world in a lifetime.",
+    "Polar bears are left-handed.",
+    "The unicorn is Scotland's national animal.",
+    "A group of flamingos is called a 'flamboyance'.",
+    "There are more possible iterations of a game of chess than there are atoms in the known universe.",
+    "The smell of freshly-cut grass is actually a plant distress call.",
+    "A day on Venus is longer than its year.",
+    "Honeybees can recognize human faces.",
+    "Wombat poop is cube-shaped.",
+    "The first oranges weren't orange.",
+    "The longest time between two twins being born is 87 days.",
+    "A bolt of lightning is six times hotter than the sun.",
+    "A baby puffin is called a puffling.",
+    "A jiffy is an actual unit of time: 1/100th of a second.",
+    "The word 'nerd' was first coined by Dr. Seuss in 'If I Ran the Zoo'.",
+    "There's a species of jellyfish that is biologically immortal.",
+    "The Eiffel Tower can be 6 inches taller during the summer due to the expansion of the iron.",
+    "The Earth is not a perfect sphere; it's slightly flattened at the poles and bulging at the equator.",
+    "A hummingbird weighs less than a penny.",
+    "Koalas have fingerprints that are nearly identical to humans'.",
+    "There's a town in Norway where the sun doesn't rise for several weeks in the winter, and it doesn't set for several weeks in the summer.",
+    "A group of owls is called a parliament.",
+    "The fingerprints of a koala are so indistinguishable from humans' that they have on occasion been confused at a crime scene.",
+    "The Hawaiian alphabet has only 13 letters.",
+    "The average person spends six months of their life waiting for red lights to turn green.",
+    "A newborn kangaroo is about 1 inch long.",
+    "The oldest known living tree is over 5,000 years old.",
+    "Coca-Cola would be green if coloring wasn't added to it.",
+    "A day on Mars is about 24.6 hours long.",
+    "The Great Wall of China is not visible from space without aid.",
+    "A group of crows is called a murder.",
+    "There's a place in France where you can witness an optical illusion that makes you appear to grow and shrink as you walk down a hill.",
+    "The world's largest desert is Antarctica, not the Sahara.",
+    "A blue whale's heart is so big that a human could swim through its arteries.",
+    "The longest word in the English language without a vowel is 'rhythms'.",
+    "Polar bears' fur is not white; it's actually transparent.",
+    "The electric chair was invented by a dentist.",
+    "An ostrich's eye is bigger than its brain.",
+    "Wombat poop is cube-shaped.",
+    "Even a small amount of alcohol poured on a scorpion will drive it crazy and sting itself to death.",
+    "The crocodile can't stick its tongue out.",
+    "The oldest known animal in the world is a 405-year-old male, discovered in 2007.",
+    "Sharks, like other fish, have their reproductive organs located in the ribcage.",
+    "The eyes of the octopus have no blind spots. On average, the brain of an octopus has 300 million neurons. When under extreme stress, some octopuses even eat their trunks.",
+    "An elephant's brain weighs about 6,000g, while a cat's brain weighs only approximately 30g.",
+    "Cats and dogs have the ability to hear ultrasound.",
+    "Sheep can survive up to 2 weeks in a state of being buried in snow.",
+    "The smartest pig in the world is owned by a math teacher in Madison, Wisconsin (USA). It has the ability to memorize worksheets multiplying to 12.",
+    "Statistics show that each rattlesnake's mating lasts up to ... more than 22 hours",
+    "Studies have found that flies are deaf.",
+    "In a lack of water, kangaroos can endure longer than camels.",
+    "Dogs have 4 toes on their hind legs and 5 toes on each of their front paws.",
+    "The average flight speed of honey bees is 24km/h. They never sleep.",
+    "Cockroaches can live up to 9 days after having their heads cut off.",
+    "If you leave a goldfish in the dark for a long time, it will eventually turn white.",
+    "The flying record for a chicken is 13 seconds.",
+    "The mosquito that causes the most deaths to humans worldwide is the mosquito.",
+    "The quack of a duck doesn't resonate, and no one knows why."
+];
 
 module.exports = {
-				config: {
-								name: "prefix",
-								version: "1.4",
-								author: "NTKhang / Christus",
-								countDown: 5,
-								role: 0,
-								description: "Changer le préfixe de commande du bot dans votre groupe ou dans tout le système (réservé aux admins bot)",
-								category: "config",
-								guide: {
-												vi: "   {pn} <new prefix>: thay đổi prefix mới trong box chat của bạn"
-																+ "\n   Ví dụ:"
-																+ "\n    {pn} #"
-																+ "\n\n   {pn} <new prefix> -g: thay đổi prefix mới trong hệ thống bot (chỉ admin bot)"
-																+ "\n   Ví dụ:"
-																+ "\n    {pn} # -g"
-																+ "\n\n   {pn} reset: thay đổi prefix trong box chat của bạn về mặc định",
-												en: "   {pn} <new prefix>: change new prefix in your box chat"
-																+ "\n   Example:"
-																+ "\n    {pn} #"
-																+ "\n\n   {pn} <new prefix> -g: change new prefix in system bot (only admin bot)"
-																+ "\n   Example:"
-																+ "\n    {pn} # -g"
-																+ "\n\n   {pn} reset: change prefix in your box chat to default",
-												fr: "   {pn} <nouveau préfixe> : change le préfixe dans votre groupe\n"
-																+ "   Exemple :\n"
-																+ "    {pn} #\n\n"
-																+ "   {pn} <nouveau préfixe> -g : change le préfixe dans tout le système du bot (admin bot uniquement)\n"
-																+ "   Exemple :\n"
-																+ "    {pn} # -g\n\n"
-																+ "   {pn} reset : réinitialise le préfixe de votre groupe à celui par défaut"
-								}
-				},
+  config: {
+    name: "prefix2",
+    version: "1.0",
+    author: "kyle",
+    countdown: 5,
+    role: 0,
+    shortdescription: "prefix of robot",
+    longdescription: "robot prefix from goatbot",
+  },
+  onStart: async function() {},
+  onChat: async ({ event, message, getlang }) => {
+    const manilatime = moment.tz("Asia/Manila");
+    const formatteddatetime = manilatime.format("MMMM D, YYYY h:mm a");
 
-				langs: {
-								vi: {
-												reset: "Đã reset prefix của bạn về mặc định: %1",
-												onlyAdmin: "Chỉ admin mới có thể thay đổi prefix hệ thống bot",
-												confirmGlobal: "Vui lòng thả cảm xúc bất kỳ vào tin nhắn này để xác nhận thay đổi prefix của toàn bộ hệ thống bot",
-												confirmThisThread: "Vui lòng thả cảm xúc bất kỳ vào tin nhắn này để xác nhận thay đổi prefix trong nhóm chat của bạn",
-												successGlobal: "Đã thay đổi prefix hệ thống bot thành: %1",
-												successThisThread: "Đã thay đổi prefix trong nhóm chat của bạn thành: %1",
-												myPrefix: "👋 Hey %1, did you ask for my prefix?\n➥ 🌐 Global: %2\n➥ 💬 This Chat: %3\nI'm %4 at your service 🫡"
-								},
-								en: {
-												reset: "Your prefix reset to default: %1",
-												onlyAdmin: "Only admin can change prefix of system bot",
-												confirmGlobal: "Please react to this message to confirm change prefix of system bot",
-												confirmThisThread: "Please react to this message to confirm change prefix in your box chat",
-												successGlobal: "Changed prefix of system bot to: %1",
-												successThisThread: "Changed prefix in your box chat to: %1",
-												myPrefix: "👋 Hey %1, did you ask for my prefix?\n➥ 🌐 Global: %2\n➥ 💬 This Chat: %3\nI'm %4 at your service 🫡"
-								},
-								fr: {
-												reset: "Votre préfixe a été réinitialisé : %1",
-												onlyAdmin: "Seul un admin bot peut changer le préfixe du système",
-												confirmGlobal: "Réagissez à ce message pour confirmer le changement de préfixe du système",
-												confirmThisThread: "Réagissez à ce message pour confirmer le changement de préfixe dans ce groupe",
-												successGlobal: "Le préfixe du système a été changé en : %1",
-												successThisThread: "Le préfixe de ce groupe a été changé en : %1",
-												myPrefix: "👋 Hey %1, tu m’as demandé mon préfixe ?\n➥ 🌐 Global : %2\n➥ 💬 Ce groupe : %3\nJe suis %4 à ton service 🫡"
-								}
-				},
+    if (event.body && event.body.toLowerCase() === "prefix") {
+      if (kylefacts.length === 0) {
+        return message.reply("No facts available.");
+      }
 
-				onStart: async function ({ message, role, args, commandName, event, threadsData, getLang }) {
-								if (!args[0])
-												return message.SyntaxError();
+      const randomFact = kylefacts[Math.floor(Math.random() * kylefacts.length)];
+      const targetDate = new Date("June 18, 2025 00:00:00");
+      const timeDiff = targetDate - new Date();
 
-								if (args[0] == 'reset') {
-												await threadsData.set(event.threadID, null, "data.prefix");
-												return message.reply(getLang("reset", global.GoatBot.config.prefix));
-								}
+      const seconds = Math.floor((timeDiff / 1000) % 60);
+      const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+      const hours = Math.floor((timeDiff / 1000 / 60 / 60) % 24);
+      const days = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
 
-								const newPrefix = args[0];
-								const formSet = {
-												commandName,
-												author: event.senderID,
-												newPrefix
-								};
+      const userNameTag = event.senderName || "User"; // Adjust based on actual property
 
-								if (args[1] === "-g")
-												if (role < 2)
-																return message.reply(getLang("onlyAdmin"));
-												else
-																formSet.setGlobal = true;
-								else
-												formSet.setGlobal = false;
-
-								return message.reply(args[1] === "-g" ? getLang("confirmGlobal") : getLang("confirmThisThread"), (err, info) => {
-												formSet.messageID = info.messageID;
-												global.GoatBot.onReaction.set(info.messageID, formSet);
-								});
-				},
-
-				onReaction: async function ({ message, threadsData, event, Reaction, getLang }) {
-								const { author, newPrefix, setGlobal } = Reaction;
-								if (event.userID !== author)
-												return;
-								if (setGlobal) {
-												global.GoatBot.config.prefix = newPrefix;
-												fs.writeFileSync(global.client.dirConfig, JSON.stringify(global.GoatBot.config, null, 2));
-												return message.reply(getLang("successGlobal", newPrefix));
-								}
-								else {
-												await threadsData.set(event.threadID, newPrefix, "data.prefix");
-												return message.reply(getLang("successThisThread", newPrefix));
-								}
-				},
-
-				onChat: async function ({ event, message, getLang, usersData }) {
-								if (event.body && event.body.toLowerCase() === "prefix")
-												return async () => {
-																const userName = await usersData.getName(event.senderID);
-																const botName = global.GoatBot.config.nickNameBot || "Bot";
-																return message.reply(getLang("myPrefix", userName, global.GoatBot.config.prefix, utils.getPrefix(event.threadID), botName));
-												};
-				}
+      return message.reply({
+        body: `Hello ${userNameTag}, my prefix is\n\n╭─────◉
+│➢ My prefix: [ ✓ ]
+│👑Owner: Rayd🤠
+│🔗 Facebook: https://www.facebook.com/efouarayd56
+╰───────────⬤
+        
+╭──────────◉
+│𝗨𝗣𝗧𝗜𝗠𝗘 :
+│⏳${hours} hours
+│⏰${minutes} minutes
+│⏱️${seconds} seconds
+│
+│📅 Date and time:
+│${formatteddatetime}
+│
+│📌 Fact: ${randomFact}
+│       
+╰───────────✪`,
+      });
+    }
+  },
 };
