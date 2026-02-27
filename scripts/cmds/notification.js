@@ -26,11 +26,8 @@ module.exports = {
 │
 ╰────────────────────────────╯
 
-Message de mon supérieur @${userName} il vous dit
-$
-
+Message de mon supérieur @${userName}
 Utilisée ✓callad pour me contacté`;
-
         return message.reply({
             body: notiMsg,
             mentions: [{
