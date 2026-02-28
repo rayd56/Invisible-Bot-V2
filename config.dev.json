@@ -23,8 +23,8 @@
     "whiteListIds": [],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
-  "nickNameBot": "👾Rayd bot🤖",
-  "prefix": "✓",
+  "nickNameBot": "⚡Rayd bot🌹✍️",
+  "prefix": "•",
   "database": {
     "type": "sqlite",
     "uriMongodb": "",
