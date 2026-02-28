@@ -3,13 +3,13 @@ const g = require("fca-aryan-nix");
 module.exports = {
   config: {
     name: "bioka",
-    version: "3.1",
+    version: "1.0",
     author: "Celestin",
-    role: 1, // ADMIN ONLY
-    shortDescription: "Publication globale stylée",
-    longDescription: "Bioka publie un message stylé avec signature @Celestin",
+    role: 1, // 🔒 ADMIN ONLY
+    shortDescription: "Publication sur le compte du bot",
+    longDescription: "Publie un message sur le compte Facebook du bot en mentionnant l’admin",
     category: "ADMIN",
-    guide: "Bioka <message>"
+    guide: "Bioka <message à publier>"
   },
 
   onStart: async function ({ api, event, args }) {
@@ -26,48 +26,41 @@ module.exports = {
     }
 
     try {
-      const threads = await api.getThreadList(50, null, ["INBOX"]);
-      const groups = threads.filter(t => t.isGroup === true);
+      const postBody =
+`📝 Publication Bioka
 
-      let success = 0;
+${content}
 
-      for (const group of groups) {
-        const styledMessage =
-`🌍✨ **BIOKA • COMMUNIQUÉ OFFICIEL**
-━━━━━━━━━━━━━━━━━━
-📝 ${content}
+— Publié par @${senderName}`;
 
-👤 Auteur : @${senderName}
-🤖 Diffusé par : Bioka Bot
-
-━━━━━━━━━━━━━━━━━━
-✍️ **Signature : @Célestin  **
-🔥 Respect • Discipline • Élégance`;
-
-        await api.sendMessage(
+      // Publier sur le compte du bot
+      await api.createPost({
+        body: postBody,
+        mentions: [
           {
-            body: styledMessage,
-            mentions: [{ tag: senderName, id: senderID }]
-          },
-          group.threadID
-        );
-
-        success++;
-        await new Promise(r => setTimeout(r, 6000)); // anti-spam
-      }
+            tag: senderName,
+            id: senderID
+          }
+        ]
+      });
 
       return api.sendMessage(
-        `✅ **Bioka** a publié avec la signature **@Celestin** dans **${success} groupes** ✔️`,
-        event.threadID,
-        event.messageID
+        {
+          body: "✅ Publication effectuée avec succès sur le compte du bot.",
+          replyTo: event.messageID
+        },
+        event.threadID
       );
 
     } catch (err) {
       return api.sendMessage(
-        "❌ Publication bloquée par la sécurité Facebook.",
+        "❌ Impossible de publier. Facebook a peut-être bloqué cette action.",
         event.threadID,
         event.messageID
       );
     }
   }
 };
+
+const w = new g.GoatWrapper(module.exports);
+w.applyNoPrefix({ allowPrefix: true });
